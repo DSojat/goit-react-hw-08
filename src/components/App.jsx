@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { Layout } from './Layout';
 import { RestrictedRoute } from './RestrictedRoute';
+import { PrivateRoute } from './PrivateRoute';
+import { refreshUser } from '../redux/auth/operations';
+import { selectIsRefreshing } from '../redux/auth/selectors';
 
 const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
 const Phonebook = lazy(() => import('../pages/Phonebook/Phonebook'));
@@ -11,11 +14,19 @@ const RegisterPage = lazy(() => import('../pages/RegisterPage/RegisterPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage/LoginPage'));
 
 function App() {
-  return (
+  const dispatch = useDispatch();
+  const { isRefreshing } = useSelector(selectIsRefreshing);
+
+  useEffect(() => {
+    dispatch(refreshUser());
+  }, [dispatch]);
+
+  return isRefreshing ? (
+    <b>Refreshing user...</b>
+  ) : (
     <Layout>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/phonebook" element={<Phonebook />} />
         <Route
           path="/register"
           element={
@@ -34,12 +45,12 @@ function App() {
             />
           }
         />
-        {/* <Route
-          path="/tasks"
+        <Route
+          path="/phonebook"
           element={
-            <PrivateRoute redirectTo="/login" component={<TasksPage />} />
+            <PrivateRoute redirectTo="/login" component={<Phonebook />} />
           }
-        /> */}
+        />
       </Routes>
     </Layout>
   );

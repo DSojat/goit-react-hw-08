@@ -1,18 +1,24 @@
+import { Formik, Form, Field } from 'formik';
+import { nanoid } from 'nanoid';
 import { useDispatch } from 'react-redux';
 import { logIn } from '../../redux/auth/operations';
 import css from './LoginForm.module.css';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
+  const emailId = nanoid();
+  const pwdId = nanoid();
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    const form = e.currentTarget;
+  const initialValues = {
+    email: '',
+    password: '',
+  };
 
+  const handleSubmit = (values, actions) => {
     dispatch(
       logIn({
-        email: form.elements.email.value,
-        password: form.elements.password.value,
+        email: values.email,
+        password: values.password,
       })
     )
       .unwrap()
@@ -23,20 +29,23 @@ export default function LoginForm() {
         console.log('login error');
       });
 
-    form.reset();
+    actions.resetForm();
   };
 
   return (
-    <form className={css.form} onSubmit={handleSubmit} autoComplete="off">
-      <label className={css.label}>
-        Email
-        <input type="email" name="email" />
-      </label>
-      <label className={css.label}>
-        Password
-        <input type="password" name="password" />
-      </label>
-      <button type="submit">Log In</button>
-    </form>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Form className={css.form} autoComplete="off">
+        <label htmlFor={emailId}>Email</label>
+        <Field className={css.field} type="email" name="email" id={emailId} />
+        <label htmlFor={pwdId}>Password</label>
+        <Field
+          className={css.field}
+          type="password"
+          name="password"
+          id={pwdId}
+        />
+        <button type="submit">Log In</button>
+      </Form>
+    </Formik>
   );
 }

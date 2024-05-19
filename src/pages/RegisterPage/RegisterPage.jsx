@@ -1,3 +1,4 @@
+import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
 import { register } from '../../redux/auth/operations';
 import css from './RegisterForm.module.css';
@@ -5,36 +6,41 @@ import css from './RegisterForm.module.css';
 export default function RegisterForm() {
   const dispatch = useDispatch();
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    const form = e.target;
+  const initialValues = {
+    username: '',
+    email: '',
+    password: '',
+  };
 
+  const handleSubmit = (values, actions) => {
     dispatch(
       register({
-        name: form.elements.name.value,
-        email: form.elements.email.value,
-        password: form.elements.password.value,
+        name: values.username,
+        email: values.email,
+        password: values.password,
       })
     );
 
-    form.reset();
+    actions.resetForm();
   };
 
   return (
-    <form className={css.form} onSubmit={handleSubmit} autoComplete="off">
-      <label className={css.label}>
-        Username
-        <input type="text" name="name" />
-      </label>
-      <label className={css.label}>
-        Email
-        <input type="email" name="email" />
-      </label>
-      <label className={css.label}>
-        Password
-        <input type="password" name="password" />
-      </label>
-      <button type="submit">Register</button>
-    </form>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Form className={css.form} autoComplete="off">
+        <label className={css.label}>
+          Username
+          <Field className={css.field} type="text" name="username" />
+        </label>
+        <label className={css.label}>
+          Email
+          <Field className={css.field} type="email" name="email" />
+        </label>
+        <label className={css.label}>
+          Password
+          <Field className={css.field} type="password" name="password" />
+        </label>
+        <button type="submit">Register</button>
+      </Form>
+    </Formik>
   );
 }
