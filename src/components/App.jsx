@@ -1,29 +1,47 @@
-import ContactList from './ContactList/ContactList';
-import SearchBox from './SearchBox/SearchBox';
-import ContactForm from './ContactForm/ContactForm';
-
-import { useEffect } from 'react';
+import { useEffect, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from '../redux/contactsOps.js';
-import { selectContacts } from '../redux/contactsSlice.js';
+
+import { Route, Routes } from 'react-router-dom';
+import { Layout } from './Layout';
+import { RestrictedRoute } from './RestrictedRoute';
+
+const HomePage = lazy(() => import('../pages/HomePage/HomePage'));
+const Phonebook = lazy(() => import('../pages/Phonebook/Phonebook'));
+const RegisterPage = lazy(() => import('../pages/RegisterPage/RegisterPage'));
+const LoginPage = lazy(() => import('../pages/LoginPage/LoginPage'));
 
 function App() {
-  const dispatch = useDispatch();
-  const { isLoading, error } = useSelector(selectContacts);
-
-  useEffect(() => {
-    dispatch(fetchContacts());
-  }, [dispatch]);
-
   return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      <SearchBox />
-      {isLoading && <p>Request in progress...</p>}
-      {error && <p>{error}</p>}
-      <ContactList />
-    </div>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/phonebook" element={<Phonebook />} />
+        <Route
+          path="/register"
+          element={
+            <RestrictedRoute
+              redirectTo="/phonebook"
+              component={<RegisterPage />}
+            />
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <RestrictedRoute
+              redirectTo="/phonebook"
+              component={<LoginPage />}
+            />
+          }
+        />
+        {/* <Route
+          path="/tasks"
+          element={
+            <PrivateRoute redirectTo="/login" component={<TasksPage />} />
+          }
+        /> */}
+      </Routes>
+    </Layout>
   );
 }
 

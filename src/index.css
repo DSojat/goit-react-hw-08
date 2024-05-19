@@ -13,17 +13,10 @@
 }
 
 #root {
-  max-width: 1280px;
   margin: 0 auto;
   padding: 32px;
   padding-bottom: 0;
   text-align: left;
-}
-
-.container {
-  max-width: 768px;
-  margin: 0 auto;
-  margin-bottom: 32px;
 }
 
 button {

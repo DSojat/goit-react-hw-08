@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 import { MdAccountBox, MdCall } from 'react-icons/md';
-import { deleteContact } from '../../redux/contactsOps';
+import { deleteContact } from '../../redux/contacts/operations';
 import css from '../Contact/Contact.module.css';
 
 const Contact = ({ contactItem: { id, name, number } }) => {
