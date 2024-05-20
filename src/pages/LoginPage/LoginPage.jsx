@@ -1,6 +1,6 @@
 import { Formik, Form, Field } from 'formik';
 import { nanoid } from 'nanoid';
-import toast, { Toaster } from 'react-hot-toast';
+import { toast } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { logIn } from '../../redux/auth/operations';
 import css from './LoginForm.module.css';
@@ -23,11 +23,11 @@ export default function LoginForm() {
       })
     )
       .unwrap()
-      .then(() => {
-        toast('Login success!');
+      .then(reponse => {
+        toast.success('Login success!!!');
       })
-      .catch(() => {
-        console.log('login error');
+      .catch(error => {
+        toast.error('Login error!!!');
       });
 
     actions.resetForm();
@@ -46,10 +46,7 @@ export default function LoginForm() {
             name="password"
             id={pwdId}
           />
-          <div>
-            <button type="submit">Log In</button>
-            <Toaster />
-          </div>
+          <button type="submit">Log In</button>
         </Form>
       </Formik>
     </>

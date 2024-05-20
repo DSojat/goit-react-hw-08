@@ -1,4 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { toast } from 'react-hot-toast';
 import { nanoid } from 'nanoid';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
@@ -32,7 +33,14 @@ const ContactForm = () => {
         name: values.username,
         number: values.usernumber,
       })
-    );
+    )
+      .unwrap()
+      .then(reponse => {
+        toast.success('Success!!!');
+      })
+      .catch(error => {
+        toast.error('Error!!!');
+      });
     actions.resetForm();
   };
 

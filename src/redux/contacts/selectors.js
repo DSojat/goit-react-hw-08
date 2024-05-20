@@ -6,6 +6,15 @@ export const selectFilteredContacts = createSelector(
   [selectContacts, selectNameFilter],
   ({ items }, nameFilter) => {
     const pattern = nameFilter.toLowerCase().trim();
-    return items.filter(({ name }) => name.toLowerCase().includes(pattern));
+    const filteredName = items.filter(({ name }) =>
+      name.toLowerCase().includes(pattern)
+    );
+    if (!filteredName.length) {
+      return items.filter(({ number }) =>
+        number.toLowerCase().includes(pattern)
+      );
+    }
+
+    return filteredName;
   }
 );
