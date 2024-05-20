@@ -1,5 +1,6 @@
 import { Formik, Form, Field } from 'formik';
 import { nanoid } from 'nanoid';
+import toast, { Toaster } from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { logIn } from '../../redux/auth/operations';
 import css from './LoginForm.module.css';
@@ -23,7 +24,7 @@ export default function LoginForm() {
     )
       .unwrap()
       .then(() => {
-        console.log('login success');
+        toast('Login success!');
       })
       .catch(() => {
         console.log('login error');
@@ -33,19 +34,24 @@ export default function LoginForm() {
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      <Form className={css.form} autoComplete="off">
-        <label htmlFor={emailId}>Email</label>
-        <Field className={css.field} type="email" name="email" id={emailId} />
-        <label htmlFor={pwdId}>Password</label>
-        <Field
-          className={css.field}
-          type="password"
-          name="password"
-          id={pwdId}
-        />
-        <button type="submit">Log In</button>
-      </Form>
-    </Formik>
+    <>
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Form className={css.form} autoComplete="off">
+          <label htmlFor={emailId}>Email</label>
+          <Field className={css.field} type="email" name="email" id={emailId} />
+          <label htmlFor={pwdId}>Password</label>
+          <Field
+            className={css.field}
+            type="password"
+            name="password"
+            id={pwdId}
+          />
+          <div>
+            <button type="submit">Log In</button>
+            <Toaster />
+          </div>
+        </Form>
+      </Formik>
+    </>
   );
 }
